@@ -1145,6 +1145,7 @@ img.tw { -webkit-user-select: none; -webkit-touch-callout: none; }
 
 </script>
 <script>const FB_CONFIG = {"apiKey": "AIzaSyDw3RT3CtqTIA9SluiUeCwIcY9XH-IsuKc", "authDomain": "halloween-26bbd.firebaseapp.com", "projectId": "halloween-26bbd", "storageBucket": "halloween-26bbd.firebasestorage.app", "messagingSenderId": "618035964895", "appId": "1:618035964895:web:84b80247cd677cc0a1326a"};
+const DEFAULT_KEY = "XjiywLvKy9PnhkqJjPnJUY4v";
 
 const OLD_COLLS = ["items","claims","paid","people","presence","activities","reacts","menu"];
 function showNoKey() {
@@ -2478,10 +2479,8 @@ const MENU_SEED = {"sam-soir": {"at": 1792260000000, "dish": "Tortillas, chili c
 
   (async () => {
     let d = null;
-    let KEY = "";
-    try { KEY = decodeURIComponent((location.hash || "").replace(/^#/, "")).trim(); } catch (e) {}
-    try { if (/^[A-Za-z0-9_-]{16,64}$/.test(KEY)) localStorage.setItem("hw-key", KEY); else KEY = localStorage.getItem("hw-key") || ""; } catch (e) {}
-    if (!/^[A-Za-z0-9_-]{16,64}$/.test(KEY)) { showNoKey(); return; }
+    // le lien simple (sans #) doit marcher : la clé de l'espace est dans la page
+    const KEY = DEFAULT_KEY;
     try {
       if (window.firebase && firebase.initializeApp) {
         const fbApp = firebase.apps.length ? firebase.app() : firebase.initializeApp(FB_CONFIG);
