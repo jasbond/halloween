@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Le week-end Halloween : qui apporte quoi."><meta property="og:title" content="Week-end Halloween"><meta property="og:description" content="Dis ce que tu apportes pour le week-end 🎃"><meta name="theme-color" content="#140f1c"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="description" content="Le week-end Halloween : qui apporte quoi."><meta property="og:title" content="Week-end Halloween"><meta property="og:description" content="Dis ce que tu apportes pour le week-end 🎃"><meta name="theme-color" content="#140f1c"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Week-end Halloween</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Creepster&family=Fredoka:wght@400;500;600;700&display=swap">
@@ -1145,6 +1145,32 @@ img.tw { -webkit-user-select: none; -webkit-touch-callout: none; }
 
 </script>
 <script>const FB_CONFIG = {"apiKey": "AIzaSyDw3RT3CtqTIA9SluiUeCwIcY9XH-IsuKc", "authDomain": "halloween-26bbd.firebaseapp.com", "projectId": "halloween-26bbd", "storageBucket": "halloween-26bbd.firebasestorage.app", "messagingSenderId": "618035964895", "appId": "1:618035964895:web:84b80247cd677cc0a1326a"};
+
+const OLD_COLLS = ["items","claims","paid","people","presence","activities","reacts","menu"];
+function showNoKey() {
+  const o = document.createElement("div");
+  o.id = "nokey";
+  o.setAttribute("role", "alert");
+  o.style.cssText = "position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;background:#140f1c;color:#f5ecdb;font:600 1.1rem/1.5 Fredoka,system-ui,sans-serif;text-align:center";
+  const b = document.createElement("div");
+  b.style.cssText = "max-width:420px;padding:24px 20px;border:2px solid #ff7a1a;border-radius:24px;background:#1f1829";
+  const t = document.createElement("div"); t.textContent = "🎃"; t.style.cssText = "font-size:3rem;line-height:1;margin-bottom:10px";
+  const p = document.createElement("p"); p.style.margin = "0";
+  p.textContent = "Ce lien est incomplet. Demande le lien complet du week-end Halloween dans le groupe.";
+  b.append(t, p); o.append(b); document.body.append(o);
+}
+async function migrateOld(fs, G) {
+  const timeout = ms => new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms));
+  const get = q => Promise.race([q.get({ source: "server" }), timeout(8000)]);
+  try {
+    const mine = await get(G.collection("menu"));
+    if (!mine.empty) return;
+    for (const c of OLD_COLLS) {
+      const s = await get(fs.collection(c));
+      for (const doc of s.docs) { await G.collection(c).doc(doc.id).set(doc.data()); await doc.ref.delete(); }
+    }
+  } catch (e) {}
+}
 let menuSeeded = false;
 const MENU_SEED = {"sam-soir": {"at": 1792260000000, "dish": "Tortillas, chili con carne et pizza faite maison", "dishes": [{"ids": ["ss01"], "name": "Tortillas"}, {"ids": ["ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08", "ss09", "ss10"], "name": "Chili con carne"}, {"ids": ["ss11", "ss12", "ss13", "ss14", "ss15", "ss16", "ss17", "ss18", "ss19", "ss20"], "name": "Pizza faite maison"}], "ings": [{"id": "ss01", "name": "Tortillas (pour le chili con carne)"}, {"id": "ss02", "name": "Bœuf haché (~500 g)"}, {"id": "ss03", "name": "Haricots rouges (1 boîte de 450 g)"}, {"id": "ss04", "name": "Pois chiches (1 petite boîte)"}, {"id": "ss05", "name": "Maïs (1 petite boîte)"}, {"id": "ss06", "name": "Oignon (1)"}, {"id": "ss07", "name": "Ail (3-4 gousses)"}, {"id": "ss08", "name": "Carotte (1)"}, {"id": "ss09", "name": "Épices chili con carne (1 sachet)"}, {"id": "ss10", "name": "Sel, poivre, persillade"}, {"id": "ss11", "name": "Pâte à pizza déjà faite"}, {"id": "ss12", "name": "Sauce tomate"}, {"id": "ss13", "name": "Mozzarella (optionnel)"}, {"id": "ss14", "name": "Fromage râpé (optionnel)"}, {"id": "ss15", "name": "Jambon (optionnel)"}, {"id": "ss16", "name": "Pepperoni (optionnel)"}, {"id": "ss17", "name": "Champignons (optionnel)"}, {"id": "ss18", "name": "Poivrons (optionnel)"}, {"id": "ss19", "name": "Olives (optionnel)"}, {"id": "ss20", "name": "Ananas (optionnel)"}]}, "dim-matin": {"at": 1792260000000, "dish": "Crêpes, œufs, céréales et fruits", "ings": [{"id": "dm02", "name": "Œufs"}, {"id": "dm03", "name": "Lait"}, {"id": "dm07", "name": "Céréales"}, {"id": "dm08", "name": "Pain"}, {"id": "dm09", "name": "Garnitures"}, {"id": "dm11", "name": "Fruits"}, {"id": "dm12", "name": "Jus de fruits"}, {"id": "dm13", "name": "Café"}, {"id": "dm14", "name": "Chocolat chaud"}]}, "sam-matin": {"at": 1792330000000, "dish": "Crêpes, œufs, céréales et fruits", "ings": [{"id": "sm02", "name": "Œufs"}, {"id": "sm03", "name": "Lait"}, {"id": "sm07", "name": "Céréales"}, {"id": "sm08", "name": "Pain"}, {"id": "sm09", "name": "Garnitures"}, {"id": "sm11", "name": "Fruits"}, {"id": "sm16", "name": "Jus de fruits"}, {"id": "sm17", "name": "Café"}, {"id": "sm18", "name": "Chocolat chaud"}]}, "sam-midi": {"at": 1792260000000, "dish": "Sashimis, poisson cru et poisson frit", "dishes": [{"ids": ["sj01", "sj09", "sj10", "sj11"], "name": "Sashimis"}, {"ids": ["sj12", "sj02", "sj03", "sj04", "sj05", "sj06", "sj07"], "name": "Poisson cru"}, {"ids": ["sj13", "sj14", "sj15"], "name": "Poisson frit"}, {"ids": ["sj08"], "name": "Accompagnement"}], "ings": [{"id": "sj01", "name": "Poisson"}, {"id": "sj08", "name": "Riz"}, {"id": "sj02", "name": "Concombre"}, {"id": "sj03", "name": "Tomate"}, {"id": "sj04", "name": "Carotte"}, {"id": "sj05", "name": "Oignon"}, {"id": "sj06", "name": "Lait de coco"}, {"id": "sj07", "name": "Citron"}, {"id": "sj09", "name": "Sauce sashimi"}, {"id": "sj10", "name": "Wasabi (pour ceux qui veulent)"}, {"id": "sj11", "name": "Gingembre mariné (pour ceux qui veulent)"}, {"id": "sj12", "name": "Poisson"}, {"id": "sj13", "name": "Poisson"}, {"id": "sj14", "name": "Oignons"}, {"id": "sj15", "name": "Sauce soja"}]}};
 </script>
@@ -2206,7 +2232,7 @@ const MENU_SEED = {"sam-soir": {"at": 1792260000000, "dish": "Tortillas, chili c
       const x = raw.replace(/^[\s\-•*·]+/, "").trim().slice(0, 60); if (!x || seen.has(norm(x))) return;
       seen.add(norm(x)); names.push(x); if (dishDefs.length) dishDefs[dishDefs.length - 1].names.push(x);
     });
-    if (names.length > 25) { meErr.textContent = "25 ingrédients maximum."; return; }
+    if (names.length > 30) { meErr.textContent = "30 ingrédients maximum."; return; }
     const old = menuOf(meal).ings || [];
     const ings = names.map(n => { const o = old.find(g => norm(g.name) === norm(n)); return { id: o ? o.id : newId(), name: n }; });
     const idOf = n => ings.find(g => norm(g.name) === norm(n)).id;
@@ -2452,11 +2478,18 @@ const MENU_SEED = {"sam-soir": {"at": 1792260000000, "dish": "Tortillas, chili c
 
   (async () => {
     let d = null;
+    let KEY = "";
+    try { KEY = decodeURIComponent((location.hash || "").replace(/^#/, "")).trim(); } catch (e) {}
+    try { if (/^[A-Za-z0-9_-]{16,64}$/.test(KEY)) localStorage.setItem("hw-key", KEY); else KEY = localStorage.getItem("hw-key") || ""; } catch (e) {}
+    if (!/^[A-Za-z0-9_-]{16,64}$/.test(KEY)) { showNoKey(); return; }
     try {
       if (window.firebase && firebase.initializeApp) {
         const fbApp = firebase.apps.length ? firebase.app() : firebase.initializeApp(FB_CONFIG);
-        d = firebase.firestore(fbApp);
-        try { d.settings({ ignoreUndefinedProperties: true, merge: true }); } catch (e) {}
+        const fs = firebase.firestore(fbApp);
+        try { fs.settings({ ignoreUndefinedProperties: true, merge: true }); } catch (e) {}
+        const G = fs.collection("g").doc(KEY);
+        d = { collection: c => G.collection(c), doc: p => { const i = p.indexOf("/"); return G.collection(p.slice(0, i)).doc(p.slice(i + 1)); } };
+        await migrateOld(fs, G);
       }
     } catch (e) { d = null; }
     try {
