@@ -1487,7 +1487,7 @@ const MENU_SEED = {"sam-soir": {"at": 1792260000000, "dish": "Tortillas, chili c
     const card = el("article", "meal big"); card.id = "ajouter";
     card.append(el("div", "add-ribbon", "🎁 Toi aussi, ajoute quelque chose !"));
     card.append(head("cauldron", "En plus du menu", "J'apporte autre chose"));
-    card.append(el("p", "group-note", "Tu veux apporter autre chose ? Boissons, dessert, bonbons, ambiance… dis-nous tout !"));
+    card.append(el("p", "group-note", "Tu veux apporter autre chose que ce qui est prévu au menu ? Un dessert, un plat en plus, de la déco, de l'ambiance… dis-nous tout !"));
     const form = el("form", "add"); form.autocomplete = "off";
     mealSel = el("select"); mealSel.id = "m-main"; mealSel.setAttribute("aria-label", "Quel repas");
     mealSel.add(new Option("Quel repas ?", ""));
